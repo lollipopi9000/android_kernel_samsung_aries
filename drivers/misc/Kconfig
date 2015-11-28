@@ -630,4 +630,10 @@ config GENERIC_BLN
          Say Y here to enable the backlight notification
          for android led-notification (modified liblight needed)
 
+config UID_CPUTIME
+	tristate "Per-UID cpu time statistics"
+	default n
+	help
+	  Per UID based cpu time statistics exported to /proc/uid_cputime
+
 endif # MISC_DEVICES
