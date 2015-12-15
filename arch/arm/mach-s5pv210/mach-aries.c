@@ -427,35 +427,35 @@ static struct s5pv210_cpufreq_voltage smdkc110_cpufreq_volt[] = {
 	}, {
 		.freq	= 1300000,
 		.varm	= DVSARM1,
-		.vint	= DVSINT0,
+		.vint	= DVSINT1,
 	}, {
 		.freq	= 1200000,
 		.varm	= DVSARM2,
-		.vint	= DVSINT1,
+		.vint	= DVSINT2,
 	}, {
 		.freq	= 1100000,
 		.varm	= DVSARM3,
-		.vint	= DVSINT1,
+		.vint	= DVSINT2,
 	}, {
 		.freq	= 1000000,
 		.varm	= DVSARM4,
-		.vint	= DVSINT2,
+		.vint	= DVSINT3,
 	}, {
 		.freq	=  800000,
 		.varm	= DVSARM5,
-		.vint	= DVSINT2,
+		.vint	= DVSINT3,
 	}, {
 		.freq	=  400000,
 		.varm	= DVSARM6,
-		.vint	= DVSINT2,
+		.vint	= DVSINT3,
 	}, {
 		.freq	=  200000,
 		.varm	= DVSARM7,
-		.vint	= DVSINT2,
+		.vint	= DVSINT3,
 	}, {
 		.freq	=  100000,
 		.varm	= DVSARM7,
-		.vint	= DVSINT3,
+		.vint	= DVSINT4,
 	},
 };
 
@@ -734,7 +734,7 @@ static struct regulator_init_data aries_buck1_data = {
 	.constraints	= {
 		.name		= "VDD_ARM",
 		.min_uV		= 750000,
-		.max_uV		= 1500000,
+		.max_uV		= 1600000,
 		.apply_uV	= 1,
 		.valid_ops_mask	= REGULATOR_CHANGE_VOLTAGE |
 				  REGULATOR_CHANGE_STATUS,

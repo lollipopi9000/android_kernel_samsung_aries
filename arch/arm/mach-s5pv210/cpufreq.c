@@ -120,35 +120,35 @@ static struct s5pv210_dvs_conf dvs_conf[] = {
 	},
 	[OC1] = { /* 1.3GHz */
 		.arm_volt   = DVSARM1,
-		.int_volt   = DVSINT0,
+		.int_volt   = DVSINT1,
 	},
 	[OC2] = { /* 1.2GHz */
 		.arm_volt   = DVSARM2,
-		.int_volt   = DVSINT1,
+		.int_volt   = DVSINT2,
 	},
 	[OC3] = { /* 1.1GHz */
 		.arm_volt   = DVSARM3,
-		.int_volt   = DVSINT1,
+		.int_volt   = DVSINT2,
 	},
 	[L0] = { /* 1.0GHz */
 		.arm_volt   = DVSARM4,
-		.int_volt   = DVSINT2,
+		.int_volt   = DVSINT3,
 	},
 	[L1] = { /* 800MHz */
 		.arm_volt   = DVSARM5,
-		.int_volt   = DVSINT2,
+		.int_volt   = DVSINT3,
 	},
 	[L2] = { /* 400MHz */
 		.arm_volt   = DVSARM6,
-		.int_volt   = DVSINT2
+		.int_volt   = DVSINT3
 	},
 	[L3] = { /* 200MHz */
 		.arm_volt   = DVSARM7,
-		.int_volt   = DVSINT2,
+		.int_volt   = DVSINT3,
 	},
 	[L4] = { /* 100MHz */
 		.arm_volt   = DVSARM7,
-		.int_volt   = DVSINT3,
+		.int_volt   = DVSINT4,
 	},
 };
 
