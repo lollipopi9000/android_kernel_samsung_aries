@@ -19,7 +19,7 @@
 
 int pvr_oc;
 unsigned int pvr_clk_val;
-static int oc_value = 250000000;
+static int oc_value;
 
 static ssize_t pvr_oc_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
 {
@@ -30,7 +30,8 @@ static ssize_t pvr_oc_store(struct kobject *kobj, struct kobj_attribute *attr, c
 {
 	sscanf(buf, "%du", &pvr_oc);
 
-	if (pvr_oc == 1) pvr_clk_val = oc_value;
+	if (pvr_oc == 1) pvr_clk_val = 220338983;
+	else if (pvr_oc == 2) pvr_clk_val = 250000000;
 	else pvr_clk_val = 200000000;
 
 	printk("## [GPU OC] : Clock Speed == %d MHz ##\n", pvr_clk_val / 1000000);
