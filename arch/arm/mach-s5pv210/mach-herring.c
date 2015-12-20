@@ -1341,10 +1341,6 @@ static struct s3c_platform_fb r61408_data __initdata = {
 };
 
 #define LCD_BUS_NUM     3
-#define DISPLAY_CS      S5PV210_MP01(1)
-#define SUB_DISPLAY_CS  S5PV210_MP01(2)
-#define DISPLAY_CLK     S5PV210_MP04(1)
-#define DISPLAY_SI      S5PV210_MP04(3)
 
 static struct spi_board_info spi_board_info[] __initdata = {
 	{
@@ -1354,7 +1350,7 @@ static struct spi_board_info spi_board_info[] __initdata = {
 		.bus_num	= LCD_BUS_NUM,
 		.chip_select	= 0,
 		.mode		= SPI_MODE_3,
-		.controller_data = (void *)DISPLAY_CS,
+		.controller_data = (void *)GPIO_DISPLAY_CS,
 	},
 };
 
@@ -1366,7 +1362,7 @@ static struct spi_board_info spi_board_info_sony[] __initdata = {
 		.bus_num	= LCD_BUS_NUM,
 		.chip_select	= 0,
 		.mode		= SPI_MODE_3,
-		.controller_data = (void *)DISPLAY_CS,
+		.controller_data = (void *)GPIO_DISPLAY_CS,
 	},
 };
 
@@ -1378,7 +1374,7 @@ static struct spi_board_info spi_board_info_hydis[] __initdata = {
 		.bus_num	= LCD_BUS_NUM,
 		.chip_select	= 0,
 		.mode		= SPI_MODE_3,
-		.controller_data = (void *)DISPLAY_CS,
+		.controller_data = (void *)GPIO_DISPLAY_CS,
 	},
 };
 
@@ -1390,14 +1386,14 @@ static struct spi_board_info spi_board_info_hitachi[] __initdata = {
 		.bus_num	= LCD_BUS_NUM,
 		.chip_select	= 0,
 		.mode		= SPI_MODE_3,
-		.controller_data = (void *)DISPLAY_CS,
+		.controller_data = (void *)GPIO_DISPLAY_CS,
 	},
 };
 
 
 static struct spi_gpio_platform_data tl2796_spi_gpio_data = {
-	.sck	= DISPLAY_CLK,
-	.mosi	= DISPLAY_SI,
+	.sck	= GPIO_DISPLAY_CLK,
+	.mosi	= GPIO_DISPLAY_SI,
 	.miso	= -1,
 	.num_chipselect = 2,
 };

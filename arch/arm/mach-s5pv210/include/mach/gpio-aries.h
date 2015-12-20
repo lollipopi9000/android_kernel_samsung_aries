@@ -1,5 +1,5 @@
-#ifndef __GPIO_HERRING_H_
-#define __GPIO_HERRING_H_
+#ifndef __GPIO_ARIES_H_
+#define __GPIO_ARIES_H_
 
 //#include <mach/gpio.h>
 
