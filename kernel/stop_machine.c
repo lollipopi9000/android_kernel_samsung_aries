@@ -12,14 +12,14 @@
 #include <linux/cpu.h>
 #include <linux/init.h>
 #include <linux/kthread.h>
-#include <linux/module.h>
+#include <linux/export.h>
 #include <linux/percpu.h>
 #include <linux/sched.h>
 #include <linux/stop_machine.h>
 #include <linux/interrupt.h>
 #include <linux/kallsyms.h>
 
-#include <asm/atomic.h>
+#include <linux/atomic.h>
 
 /*
  * Structure to determine completion condition and record errors.  May

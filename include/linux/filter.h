@@ -9,7 +9,7 @@
 #include <linux/types.h>
 
 #ifdef __KERNEL__
-#include <asm/atomic.h>
+#include <linux/atomic.h>
 #endif
 
 /*
@@ -73,6 +73,9 @@ struct sock_fprog {	/* Required for SO_ATTACH_FILTER. */
 #define         BPF_LSH         0x60
 #define         BPF_RSH         0x70
 #define         BPF_NEG         0x80
+#define		BPF_MOD		0x90
+#define		BPF_XOR		0xa0
+
 #define         BPF_JA          0x00
 #define         BPF_JEQ         0x10
 #define         BPF_JGT         0x20
@@ -126,7 +129,8 @@ struct sock_fprog {	/* Required for SO_ATTACH_FILTER. */
 #define SKF_AD_HATYPE	28
 #define SKF_AD_RXHASH	32
 #define SKF_AD_CPU	36
-#define SKF_AD_MAX	40
+#define SKF_AD_ALU_XOR_X	40
+#define SKF_AD_MAX	44
 #define SKF_NET_OFF   (-0x100000)
 #define SKF_LL_OFF    (-0x200000)
 
@@ -153,9 +157,12 @@ static inline unsigned int sk_filter_len(const struct sk_filter *fp)
 extern int sk_filter(struct sock *sk, struct sk_buff *skb);
 extern unsigned int sk_run_filter(const struct sk_buff *skb,
 				  const struct sock_filter *filter);
+extern int sk_unattached_filter_create(struct sk_filter **pfp,
+				       struct sock_fprog *fprog);
+extern void sk_unattached_filter_destroy(struct sk_filter *fp);
 extern int sk_attach_filter(struct sock_fprog *fprog, struct sock *sk);
 extern int sk_detach_filter(struct sock *sk);
-extern int sk_chk_filter(struct sock_filter *filter, int flen);
+extern int sk_chk_filter(struct sock_filter *filter, unsigned int flen);
 
 #ifdef CONFIG_BPF_JIT
 extern void bpf_jit_compile(struct sk_filter *fp);
@@ -181,10 +188,14 @@ enum {
 	BPF_S_ALU_MUL_K,
 	BPF_S_ALU_MUL_X,
 	BPF_S_ALU_DIV_X,
+	BPF_S_ALU_MOD_K,
+	BPF_S_ALU_MOD_X,
 	BPF_S_ALU_AND_K,
 	BPF_S_ALU_AND_X,
 	BPF_S_ALU_OR_K,
 	BPF_S_ALU_OR_X,
+	BPF_S_ALU_XOR_K,
+	BPF_S_ALU_XOR_X,
 	BPF_S_ALU_LSH_K,
 	BPF_S_ALU_LSH_X,
 	BPF_S_ALU_RSH_K,
@@ -228,6 +239,7 @@ enum {
 	BPF_S_ANC_HATYPE,
 	BPF_S_ANC_RXHASH,
 	BPF_S_ANC_CPU,
+	BPF_S_ANC_ALU_XOR_X,
 };
 
 #endif /* __KERNEL__ */

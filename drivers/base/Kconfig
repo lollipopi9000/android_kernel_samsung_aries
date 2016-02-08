@@ -170,7 +170,7 @@ config SYS_HYPERVISOR
 
 config DMA_SHARED_BUFFER
 	bool "Buffer framework to be shared between drivers"
-	default n
+	default y
 	select ANON_INODES
 	help
 	  This option enables the framework for buffer-sharing between
