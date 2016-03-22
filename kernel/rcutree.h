@@ -80,9 +80,10 @@
  * Dynticks per-CPU state.
  */
 struct rcu_dynticks {
-	int dynticks_nesting;	/* Track irq/process nesting level. */
-	int dynticks_nmi_nesting; /* Track NMI nesting level. */
-	atomic_t dynticks;	/* Even value for dynticks-idle, else odd. */
+	long long dynticks_nesting; /* Track irq/process nesting level. */
+				    /* Process level is worth LLONG_MAX/2. */
+	int dynticks_nmi_nesting;   /* Track NMI nesting level. */
+	atomic_t dynticks;	    /* Even value for idle, else odd. */
 };
 
 /* RCU's kthread states for tracing. */
@@ -226,9 +227,9 @@ struct rcu_data {
 					/*  in order to detect GP end. */
 	unsigned long	gpnum;		/* Highest gp number that this CPU */
 					/*  is aware of having started. */
-	unsigned long	passed_quiesc_completed;
-					/* Value of completed at time of qs. */
-	bool		passed_quiesc;	/* User-mode/idle loop etc. */
+	unsigned long	passed_quiesce_gpnum;
+					/* gpnum at time of quiescent state. */
+	bool		passed_quiesce;	/* User-mode/idle loop etc. */
 	bool		qs_pending;	/* Core waits for quiesc state. */
 	bool		beenonline;	/* CPU online at least once. */
 	bool		preemptible;	/* Preemptible RCU? */
@@ -270,16 +271,12 @@ struct rcu_data {
 					/* did other CPU force QS recently? */
 	long		blimit;		/* Upper limit on a processed batch */
 
-#ifdef CONFIG_NO_HZ
 	/* 3) dynticks interface. */
 	struct rcu_dynticks *dynticks;	/* Shared per-CPU dynticks state. */
 	int dynticks_snap;		/* Per-GP tracking for dynticks. */
-#endif /* #ifdef CONFIG_NO_HZ */
 
 	/* 4) reasons this CPU needed to be kicked by force_quiescent_state */
-#ifdef CONFIG_NO_HZ
 	unsigned long dynticks_fqs;	/* Kicked due to dynticks idle. */
-#endif /* #ifdef CONFIG_NO_HZ */
 	unsigned long offline_fqs;	/* Kicked due to being offline. */
 	unsigned long resched_ipi;	/* Sent a resched IPI. */
 
@@ -295,6 +292,7 @@ struct rcu_data {
 	unsigned long n_rp_need_nothing;
 
 	int cpu;
+	struct rcu_state *rsp;
 };
 
 /* Values for signaled field in struct rcu_state. */
@@ -302,11 +300,7 @@ struct rcu_data {
 #define RCU_GP_INIT		1	/* Grace period being initialized. */
 #define RCU_SAVE_DYNTICK	2	/* Need to scan dyntick state. */
 #define RCU_FORCE_QS		3	/* Need to force quiescent state. */
-#ifdef CONFIG_NO_HZ
 #define RCU_SIGNAL_INIT		RCU_SAVE_DYNTICK
-#else /* #ifdef CONFIG_NO_HZ */
-#define RCU_SIGNAL_INIT		RCU_FORCE_QS
-#endif /* #else #ifdef CONFIG_NO_HZ */
 
 #define RCU_JIFFIES_TILL_FORCE_QS	 3	/* for rsp->jiffies_force_qs */
 

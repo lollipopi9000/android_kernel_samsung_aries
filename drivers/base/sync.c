@@ -15,7 +15,7 @@
  */
 
 #include <linux/debugfs.h>
-#include <linux/export.h>
+#include <linux/module.h>
 #include <linux/file.h>
 #include <linux/fs.h>
 #include <linux/kernel.h>
@@ -615,12 +615,10 @@ int sync_fence_wait(struct sync_fence *fence, long timeout)
 		return fence->status;
 	}
 
-	if (fence->status == 0) {
-		if (timeout > 0) {
-			pr_info("fence timeout on [%p] after %dms\n", fence,
-				jiffies_to_msecs(timeout));
-			sync_dump();
-		}
+	if (fence->status == 0 && timeout > 0) {
+		pr_info("fence timeout on [%p] after %dms\n", fence,
+			jiffies_to_msecs(timeout));
+		sync_dump();
 		return -ETIME;
 	}
 
@@ -742,7 +740,7 @@ err_put_fd:
 	return err;
 }
 
-static int sync_fill_pt_info(struct sync_pt *pt, void *data, int size)
+int sync_fill_pt_info(struct sync_pt *pt, void *data, int size)
 {
 	struct sync_pt_info *info = data;
 	int ret;
@@ -769,6 +767,7 @@ static int sync_fill_pt_info(struct sync_pt *pt, void *data, int size)
 
 	return info->len;
 }
+
 
 static long sync_fence_ioctl_fence_info(struct sync_fence *fence,
 					unsigned long arg)

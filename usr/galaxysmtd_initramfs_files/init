@@ -17,7 +17,19 @@ done
 /lvm/sbin/lvm vgscan --mknodes --ignorelockingfailure
 /lvm/sbin/lvm vgchange -aly --ignorelockingfailure
 
-busybox mount -t ext4 /dev/lvpool/system /system
+# use blkid to detect fs type for /system
+system_fs=$(busybox blkid '/dev/lvpool/system' | busybox awk -F 'TYPE=' '{print $2}' | busybox sed -e 's/"//g')
+busybox echo "detected fs type $system_fs for /system" >>boot.txt
+# unlikely but adding check anyway
+# we don;t have acess to /proc/filesystems so we hardcode ext4 and f2fs
+if busybox test  "$system_fs" = 'ext4' || busybox test "$system_fs" = 'f2fs'; then
+busybox mount -t "$system_fs" /dev/lvpool/system /system
+else
+# let mount decide the fs type
+busybox echo "auto detecting fail, relying on mount" >>boot.txt
+busybox mount /dev/lvpool/system /system
+fi;
+
 busybox mount -t yaffs2 /dev/block/mtdblock3 /cache
 
 image=/stage1/ramdisk.cpio

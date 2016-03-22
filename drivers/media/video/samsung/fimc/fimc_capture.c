@@ -300,6 +300,7 @@ static int fimc_camera_start(struct fimc_control *ctrl)
 			return ret;
 		}
 	} else {
+#ifndef CONFIG_SAMSUNG_GALAXYS4G
 #ifdef CONFIG_MACH_ARIES
 		if (vtmode == 1 && device_id != 0 && (ctrl->cap->rotate == 90 || ctrl->cap->rotate == 270)) {
 #else // CONFIG_MACH_P1
@@ -381,6 +382,17 @@ static int fimc_camera_start(struct fimc_control *ctrl)
 #endif
 		}
 	}
+#else
+	}
+
+	ctrl->cam->width = cam_frmsize.discrete.width;
+	ctrl->cam->height = cam_frmsize.discrete.height;
+
+	ctrl->cam->window.left = 0;
+	ctrl->cam->window.top = 0;
+	ctrl->cam->window.width = ctrl->cam->width;
+	ctrl->cam->window.height = ctrl->cam->height;
+#endif
 
 	cam_ctrl.id = V4L2_CID_CAM_PREVIEW_ONOFF;
 	cam_ctrl.value = 1;
@@ -1866,7 +1878,7 @@ int fimc_streamon_capture(void *fh)
 		}
 	}
 
-#else // CONFIG_MACH_ARIES
+#elif defined(CONFIG_MACH_ARIES) && !defined(CONFIG_SAMSUNG_GALAXYS4G)
 
 	if (!ctrl->cam->initialized)
 		fimc_camera_init(ctrl);
@@ -1900,6 +1912,22 @@ int fimc_streamon_capture(void *fh)
 			ctrl->cam->height = ctrl->cam->window.height = cam_frmsize.discrete.height;
 		}
 	}
+#else // CONFIG_SAMSUNG_GALAXYS4G
+	if (!ctrl->cam->initialized)
+		fimc_camera_init(ctrl);
+
+	ret = subdev_call(ctrl, video, enum_framesizes, &cam_frmsize);
+	if (ret < 0) {
+		dev_err(ctrl->dev, "%s: enum_framesizes failed\n", __func__);
+
+        if(ret != -ENOIOCTLCMD)
+            return ret;
+	} else {
+	}
+	ctrl->cam->window.left = 0;
+	ctrl->cam->window.top = 0;
+	ctrl->cam->width = ctrl->cam->window.width = cam_frmsize.discrete.width;
+	ctrl->cam->height = ctrl->cam->window.height = cam_frmsize.discrete.height;
 #endif
 
 	if (ctrl->id != 2 &&
@@ -1935,12 +1963,12 @@ int fimc_streamon_capture(void *fh)
 			fimc_hwset_output_yuv(ctrl, cap->fmt.pixelformat);
 
 		fimc_hwset_output_size(ctrl, cap->fmt.width, cap->fmt.height);
-#ifdef CONFIG_MACH_ARIES
+#if defined(CONFIG_MACH_ARIES) && !defined(CONFIG_SAMSUNG_GALAXYS4G)
 		if ((device_id != 0) && (vtmode != 1)) {
 			ctrl->cap->rotate = 90;
 			dev_err(ctrl->dev, "%s, rotate 90", __func__);
 		}
-#else // CONFIG_MACH_P1
+#elif defined(CONFIG_MACH_P1)
 		if ((fimc->active_camera == CAMERA_ID_FRONT) && (ctrl->vt_mode == 0)) {
 			ctrl->cap->rotate = 270;
 			dev_err(ctrl->dev, "%s, rotate 270", __func__);
@@ -2104,4 +2132,5 @@ int fimc_dqbuf_capture(void *fh, struct v4l2_buffer *b)
 
 	return ret;
 }
+
 

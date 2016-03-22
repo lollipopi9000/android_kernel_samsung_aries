@@ -10,6 +10,7 @@
 
 #if defined(CONFIG_MACH_HERRING) \
 	|| defined (CONFIG_SAMSUNG_GALAXYS)   \
+	|| defined (CONFIG_SAMSUNG_GALAXYS4G) \
 	|| defined (CONFIG_MACH_P1)           \
 	|| defined (CONFIG_SAMSUNG_GALAXYSB)  \
 	|| defined (CONFIG_SAMSUNG_CAPTIVATE) \

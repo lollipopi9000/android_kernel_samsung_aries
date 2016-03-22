@@ -246,7 +246,6 @@ config MACH_ARIES
 	select S5PV210_POWER_DOMAIN
 	select S5P_DEV_CSIS0
 	select S5P_SETUP_MIPIPHY
-	select ARM_HAS_SG_CHAIN
 	help
 	  Machine support for Aries
 
@@ -269,7 +268,6 @@ config MACH_P1
 	select S5PV210_POWER_DOMAIN
 	select S5P_DEV_CSIS0
 	select S5P_SETUP_MIPIPHY
-	select ARM_HAS_SG_CHAIN
 	help
 	  Machine support for P1
 
@@ -282,6 +280,12 @@ config PHONE_ARIES
 	depends on MACH_ARIES
 	help
 	 Select Aries Phone
+
+config PHONE_ARIES_STE
+	bool "select aries ste"
+	depends on MACH_ARIES
+	help
+	 Select Aries Ste Phone
 
 config PHONE_ARIES_CDMA
 	bool "select aries cdma"
@@ -305,6 +309,31 @@ config SAMSUNG_GALAXYS
 	depends on MACH_ARIES
 	help
 	 Select Samsung Galaxy S GT-I9000
+
+config SAMSUNG_GALAXYS4G
+	bool "select SGHT959V/T959P/T959W"
+	depends on MACH_ARIES
+	help
+	 Select Samsung Galaxy S 4G Series
+
+if SAMSUNG_GALAXYS4G
+choice
+prompt "Select device variant"
+config SAMSUNG_GALAXYS4G_TMOBILE_VERSION
+	bool "select T959V"
+	help
+	 Select Samsung Galaxy S 4G SGH-T959V
+config SAMSUNG_GALAXYS4G_WIND_VERSION
+	bool "select T959W"
+	help
+	 Select Samsung Galaxy S 4G SGH-T959W
+config SAMSUNG_GALAXYS4G_TELUS_VERSION
+	bool "select T959P"
+	select MFD_CG2900
+	help
+	 Select Samsung Galaxy S Fascinate 4G SGH-T959P
+endchoice
+endif
 
 config SAMSUNG_GALAXYSB
 	bool "select GTI9000B"
@@ -468,9 +497,3 @@ config SEC_HEADSET
 	help
 	  Provides support for detecting SEC 2 wire devices, such as wired
 	  headset.
-
-config ION_S5P
-	bool "Enable ION memory management"
-	depends on ION
-	help
-	  Provides support for ION memory.
