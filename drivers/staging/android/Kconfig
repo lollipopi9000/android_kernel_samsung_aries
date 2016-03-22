@@ -131,7 +131,7 @@ config SW_SYNC_USER
 	  *WARNING* improper use of this can result in deadlocking kernel
 	  drivers from userspace.
 
-source "drivers/staging/android/ion/Kconfig"
+# source "drivers/staging/android/ion/Kconfig"
 
 config ANDROID_LMK_ADJ_RBTREE
 	bool "Use RBTREE for Android Low Memory Killer"
