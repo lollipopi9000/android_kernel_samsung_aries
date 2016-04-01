@@ -139,12 +139,6 @@ static inline void account_system_vtime(struct task_struct *tsk)
 extern void account_system_vtime(struct task_struct *tsk);
 #endif
 
-#if defined(CONFIG_JRCU)
-extern int rcu_nmi_seen;
-# define rcu_irq_enter() do { } while (0)
-# define rcu_irq_exit() do { } while (0)
-# define rcu_nmi_enter() do { rcu_nmi_seen = 1; } while (0)
-# define rcu_nmi_exit() do { } while (0)
 #if defined(CONFIG_TINY_RCU) || defined(CONFIG_TINY_PREEMPT_RCU)
 
 static inline void rcu_nmi_enter(void)
@@ -158,7 +152,6 @@ static inline void rcu_nmi_exit(void)
 #else
 extern void rcu_nmi_enter(void);
 extern void rcu_nmi_exit(void);
-#endif
 #endif
 
 /*
