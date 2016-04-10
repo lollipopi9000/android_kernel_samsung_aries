@@ -937,7 +937,7 @@ static int __init s5pv210_cpu_init(struct cpufreq_policy *policy)
 
 	int val = cpufreq_frequency_table_cpuinfo(policy, s5pv210_freq_table);
 
-	policy->min = 100000;
+	policy->min = 200000;
 	policy->max = 1200000;
 
 #ifdef CONFIG_S5PV210_CPUFREQ_SET_MINMAX
